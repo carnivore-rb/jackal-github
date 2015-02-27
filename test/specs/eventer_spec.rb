@@ -25,6 +25,7 @@ describe Jackal::Github::Eventer do
       source_wait{ !MessageStore.messages.empty? }
       result = MessageStore.messages.pop
       result.get(:data, :github).wont_be :nil?
+      result.get(:data, :github, :url_path).must_equal '/v2/github'
     end
 
   end
