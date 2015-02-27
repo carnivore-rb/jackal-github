@@ -39,7 +39,8 @@ module Jackal
           Smash.new(
             :event => g_headers[:x_github_event],
             :query => g_query,
-            :headers => g_headers
+            :headers => g_headers,
+            :url_path => message[:message][:request].path
           )
         )
         content
