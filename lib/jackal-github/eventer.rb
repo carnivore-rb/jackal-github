@@ -10,9 +10,8 @@ module Jackal
       # @param message [Carnivore::Message]
       # @return [Truthy, Falsey]
       def valid?(message)
-        super do |payload|
-          payload[:repository] &&
-            !payload[:id]
+        super do |_|
+          message[:message].get(:headers, :x_github_event)
         end
       end
 
@@ -20,9 +19,9 @@ module Jackal
       #
       # @param message [Carnivore::Message]
       def execute(message)
-        failure_wrap(message) do |*_|
+        failure_wrap(message) do |_|
           content = format_payload(message)
-          payload = new_payload(name_for_payload(content), payload)
+          payload = new_payload(name_for_payload(content), content)
           job_completed(:github, payload, message)
         end
       end
@@ -34,8 +33,8 @@ module Jackal
       def format_payload(message)
         content = Smash.new
         g_payload = message[:message][:body]
-        g_headers = message[:message][:headers]
-        g_query = message[:message][:query]
+        g_headers = message[:message][:headers] || {}
+        g_query = message[:message][:query] || {}
         content[:github] = g_payload.merge(
           Smash.new(
             :event => g_headers[:x_github_event],
