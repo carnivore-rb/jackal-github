@@ -4,7 +4,7 @@ module Jackal
   module Github
     module Formatter
 
-      class CodeFetcher < Formatter
+      class CodeFetcher < Jackal::Formatter
 
         # Format payloads from source
         SOURCE = '*'
@@ -39,8 +39,8 @@ module Jackal
         # @return [Smash]
         def set_reference_information(event, payload)
           method_name = "#{event}_reference"
-          if(respond_to?(method_name))
-            ref, sha = send(method_name(payload))
+          if(self.respond_to?(method_name, true))
+            ref, sha = send(method_name, payload)
             payload.set(:data, :code_fetcher, :info, :reference, ref)
             payload.set(:data, :code_fetcher, :info, :commit_sha, sha)
           end
@@ -49,23 +49,39 @@ module Jackal
 
         private
 
+        # Format for commit comment event
+        #
+        # @param payload [Smash]
+        # @return [Array<String>] [reference, commit_id]
         def commit_comment_reference(payload)
           [payload.get(:data, :github, :comment, :commit_id),
             payload.get(:data, :github, :comment, :commit_id)]
         end
 
-        def create__reference(payload)
+        # Format for create event
+        #
+        # @param payload [Smash]
+        # @return [Array<String>] [reference, commit_id]
+        def create_reference(payload)
           [payload.get(:data, :github, :ref),
             payload.get(:data, :github, :ref)]
         end
         alias_method :delete_reference, :create_reference
 
+        # Format for deployment event
+        #
+        # @param payload [Smash]
+        # @return [Array<String>] [reference, commit_id]
         def deployment_reference(payload)
           [payload.get(:data, :github, :ref),
             payload.get(:data, :github, :sha)]
         end
         alias_method :deployment_status_reference, :deployment_reference
 
+        # Format for pull request event
+        #
+        # @param payload [Smash]
+        # @return [Array<String>] [reference, commit_id]
         def pull_request_reference(payload)
           payload.set(:data, :code_fetcher, :info, :owner,
             payload.get(:data, :github, :pull_request, :head, :repo, :owner, :login))
@@ -79,11 +95,21 @@ module Jackal
             payload.get(:data, :github, :pull_request, :head, :sha)]
         end
 
+        # Format for push event
+        #
+        # @param payload [Smash]
+        # @return [Array<String>] [reference, commit_id]
         def push_reference(payload)
+          payload.set(:data, :code_fetcher, :info, :owner,
+            payload.get(:data, :github, :repository, :owner, :name))
           [payload.get(:data, :github, :ref),
-            payload.get(:data, :github, :commits).first[:id]]
+            payload.get(:data, :github, :head_commit, :id)]
         end
 
+        # Format for status event
+        #
+        # @param payload [Smash]
+        # @return [Array<String>] [reference, commit_id]
         def status_reference(payload)
           [payload.get(:data, :github, :sha),
             payload.get(:data, :github, :sha)]
