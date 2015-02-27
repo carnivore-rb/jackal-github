@@ -73,8 +73,8 @@ module Jackal
         # @param payload [Smash]
         # @return [Array<String>] [reference, commit_id]
         def deployment_reference(payload)
-          [payload.get(:data, :github, :ref),
-            payload.get(:data, :github, :sha)]
+          [payload.get(:data, :github, :deployment, :ref),
+            payload.get(:data, :github, :deployment, :sha)]
         end
         alias_method :deployment_status_reference, :deployment_reference
 
