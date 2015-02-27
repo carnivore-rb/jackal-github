@@ -1,0 +1,30 @@
+{
+  "verbosity": "error",
+  "jackal": {
+    "require": [
+      "carnivore-http",
+      "jackal-github"
+    ],
+    "github": {
+      "sources": {
+        "input": {
+          "type": "http_paths",
+          "args": {
+            "port": "5667",
+            "path": "/v2/github",
+            "method": "post"
+          }
+        },
+        "output": {
+          "type": "spec"
+        }
+      },
+      "callbacks": [
+        "Jackal::Github::Eventer"
+      ],
+      "formatters": [
+        "Jackal::Github::Formatter::CodeFetcher"
+      ]
+    }
+  }
+}
