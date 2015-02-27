@@ -32,6 +32,8 @@ describe Jackal::Github::Eventer do
         result.get(:data, :code_fetcher, :info, :private).must_equal false
         result.get(:data, :code_fetcher, :info, :url).must_equal 'https://github.com/baxterthehacker/public-repo.git'
         result.get(:data, :code_fetcher, :info, :owner).must_equal 'baxterthehacker'
+        result.get(:data, :code_fetcher, :info, :commit_sha).wont_be :empty?
+        result.get(:data, :code_fetcher, :info, :reference).wont_be :empty?
       end
 
     end
