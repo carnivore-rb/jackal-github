@@ -52,7 +52,9 @@ module Jackal
       # @return [String] payload name
       # @note defaults to `github`
       def name_for_payload(event)
-        config.fetch(:names, event, :github)
+        config.fetch(:names, event,
+          config.fetch(:names, :default, :github)
+        )
       end
 
     end
