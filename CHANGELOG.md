@@ -1,3 +1,7 @@
+# v0.1.4
+* Add service registration information
+* Provide constraints on jackal dependency
+
 # v0.1.2
 * Add extra filtering ability via formatters based on git information
 
