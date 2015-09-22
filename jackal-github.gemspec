@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = 'GitHub payload event helper'
   s.require_path = 'lib'
   s.license = 'Apache 2.0'
-  s.add_runtime_dependency 'jackal', '>= 0.3.10', '< 1.0.0'
+  s.add_runtime_dependency 'jackal', '>= 0.3.10', '< 2.0'
   s.add_development_dependency 'carnivore-http'
   s.files = Dir['lib/**/*'] + %w(jackal-github.gemspec README.md CHANGELOG.md CONTRIBUTING.md LICENSE)
 end
