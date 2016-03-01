@@ -1,3 +1,6 @@
+# v0.1.8
+* Support non-HTTP event message
+
 # v0.1.6
 * Relax jackal constraint
 
