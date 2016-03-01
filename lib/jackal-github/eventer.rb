@@ -10,8 +10,9 @@ module Jackal
       # @param message [Carnivore::Message]
       # @return [Truthy, Falsey]
       def valid?(message)
-        super do |_|
-          message[:message].get(:headers, :x_github_event)
+        super do |payload|
+          payload.get(:pusher) ||
+            message[:message].get(:headers, :x_github_event)
         end
       end
 
@@ -82,15 +83,15 @@ module Jackal
       # @return [Smash]
       def format_payload(message)
         content = Smash.new
-        g_payload = message[:message][:body]
+        g_payload = unpack(message) #message[:message][:body]
         g_headers = message[:message][:headers] || {}
         g_query = message[:message][:query] || {}
         content[:github] = g_payload.merge(
           Smash.new(
-            :event => g_headers[:x_github_event],
+            :event => g_headers.fetch(:x_github_event, 'push'),
             :query => g_query,
             :headers => g_headers,
-            :url_path => message[:message][:request].path
+            :url_path => (message[:message][:request] && message[:message][:request].path)
           )
         )
         content

@@ -38,6 +38,9 @@ module Jackal
         # @param payload [Smash]
         # @return [Smash]
         def set_reference_information(event, payload)
+          if(event.empty?)
+            event = 'push'
+          end
           method_name = "#{event}_reference"
           if(self.respond_to?(method_name, true))
             ref, sha = send(method_name, payload)
