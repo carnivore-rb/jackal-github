@@ -83,7 +83,7 @@ module Jackal
       # @return [Smash]
       def format_payload(message)
         content = Smash.new
-        g_payload = unpack(message) #message[:message][:body]
+        g_payload = message[:message].get(:headers, :x_github_event) ? message[:message][:body] : unpack(message)
         g_headers = message[:message][:headers] || {}
         g_query = message[:message][:query] || {}
         content[:github] = g_payload.merge(
