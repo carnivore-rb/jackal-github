@@ -1,3 +1,6 @@
+# v0.1.10
+* Fix HTTP type extraction based on header match
+
 # v0.1.8
 * Support non-HTTP event message
 
